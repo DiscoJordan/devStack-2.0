@@ -11,11 +11,21 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.config({
-    extends: ["next/core-web-vitals", "next/typescript", "prettier"],
+    extends: [
+      "next/core-web-vitals",
+      "next/typescript",
+      "prettier",
+      "plugin:tailwindcss/recommended",
+    ],
     rules: {
-      semi: ["error"],
+      semi: ["error", "always"],
       quotes: ["error", "double"],
+      "no-var": "error",
+      "prefer-const": "error",
+      "no-unused-vars": ["warn"],
     },
+  }),
+  {
     ignores: [
       "node_modules/**",
       ".next/**",
@@ -23,7 +33,7 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
     ],
-  })
+  },
 ];
 
 export default eslintConfig;
