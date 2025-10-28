@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { Input } from "@/components/ui/input";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
 // import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
 // import GlobalResult from "./GlobalResult";
 
@@ -82,6 +82,7 @@ const GlobalSearch = () => {
           type="text"
           placeholder="Search globally"
           value={""}
+          onChange={() => {}}
           //   onChange={(e: {
           //     target: { value: React.SetStateAction<string> };
           //   }) => {

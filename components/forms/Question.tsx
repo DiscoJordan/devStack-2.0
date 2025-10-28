@@ -23,7 +23,6 @@ import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "@/context/ThemeProvider";
 
 import { createQuestion } from "@/lib/actions/question.action";
-import { title } from "process";
 
 interface Props {
   type?: string;
@@ -65,7 +64,6 @@ const Question = ({ type, mongoUserId, questionDetails }: Props) => {
   async function onSubmit(values: z.infer<typeof QuestionsSchema>) {
     setIsSubmitting(true);
     try {
-      console.log("values", values);
       await createQuestion({
         title: values.title,
         content: values.explanation,
