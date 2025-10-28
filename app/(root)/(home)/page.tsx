@@ -5,106 +5,12 @@ import NoResult from "@/components/shared/NoResult";
 import LocalSearchbar from "@/components/shared/search/LocalSearchBar";
 import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filters";
+import { getQuestions } from "@/lib/actions/question.action";
 import Link from "next/link";
 
-export default function Home() {
-  const questions = [
-    {
-      _id: "1",
-      title: "How to optimize the performance of a React application?",
-      tags: [
-        { _id: "t1", name: "react" },
-        { _id: "t2", name: "performance" },
-        { _id: "t3", name: "optimization" },
-      ],
-      author: {
-        _id: "u1",
-        name: "Alex Petrov",
-        picture: "/assets/images/avatar1.png",
-        clerkId: "clerk_1",
-      },
-      upvotes: ["u3", "u4", "u7", "u8"],
-      views: 320000000,
-      answers: [{}, {}, {}, {}, {}],
-      createdAt: new Date("2025-01-10"),
-    },
-    {
-      _id: "2",
-      title: "What is the difference between useEffect and useLayoutEffect?",
-      tags: [
-        { _id: "t4", name: "react" },
-        { _id: "t5", name: "hooks" },
-        { _id: "t6", name: "javascript" },
-      ],
-      author: {
-        _id: "u2",
-        name: "Maria Kowalska",
-        picture: "/assets/images/avatar2.png",
-        clerkId: "clerk_2",
-      },
-      upvotes: ["u1", "u5", "u6"],
-      views: 280,
-      answers: [{}, {}, {}],
-      createdAt: new Date("2025-10-15"),
-    },
-    {
-      _id: "3",
-      title: "How to connect Docker to a Node.js application?",
-      tags: [
-        { _id: "t7", name: "nodejs" },
-        { _id: "t8", name: "docker" },
-        { _id: "t9", name: "devops" },
-      ],
-      author: {
-        _id: "u3",
-        name: "Piotr Nowak",
-        picture: "/assets/images/avatar3.png",
-        clerkId: "clerk_3",
-      },
-      upvotes: ["u1", "u2"],
-      views: 198,
-      answers: [{}, {}, {}, {}],
-      createdAt: new Date("2025-10-08"),
-    },
-    {
-      _id: "4",
-      title: "Best practices for using TypeScript with React",
-      tags: [
-        { _id: "t10", name: "typescript" },
-        { _id: "t11", name: "react" },
-        { _id: "t12", name: "frontend" },
-      ],
-      author: {
-        _id: "u4",
-        name: "Julia Nowicka",
-        picture: "/assets/images/avatar4.png",
-        clerkId: "clerk_4",
-      },
-      upvotes: ["u2", "u3", "u4", "u5", "u6"],
-      views: 500,
-      answers: [{}, {}, {}, {}, {}, {}, {}, {}],
-      createdAt: new Date("2025-04-22"),
-    },
-    {
-      _id: "5",
-      title: "How to use PostgreSQL in a Next.js application?",
-      tags: [
-        { _id: "t13", name: "nextjs" },
-        { _id: "t14", name: "postgresql" },
-        { _id: "t15", name: "database" },
-      ],
-      author: {
-        _id: "u5",
-        name: "Oleh Ivanenko",
-        picture: "/assets/images/avatar5.png",
-        clerkId: "clerk_5",
-      },
-      upvotes: ["u1", "u2", "u3"],
-      views: 145,
-      answers: [{}, {}],
-      createdAt: new Date("2025-05-30"),
-    },
-  ];
+export default async function Home() {
+  const result = await getQuestions({});
+
   return (
     <>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -134,8 +40,8 @@ export default function Home() {
 
       <HomeFilters />
       <div className="mt-10 flex w-full flex-col gap-6">
-        {questions.length > 0 ? (
-          questions.map((question) => (
+        {result.questions.length > 0 ? (
+          result.questions.map((question) => (
             <QuestionCard
               key={question._id}
               _id={question._id}
