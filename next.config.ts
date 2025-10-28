@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     serverActions: {},
     mdxRs: true,
   },
-  serverComponentsExternalPackages: ["mongoose"],
+  serverExternalPackages: ["mongoose"],
 };
 
 export default nextConfig;
