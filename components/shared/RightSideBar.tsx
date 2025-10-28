@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { title } from "process";
-import React, { use } from "react";
+import React from "react";
 import RenderTag from "./RenderTag";
 // import RenderTag from "./RenderTag";
 // import { getHotQuestions } from "@/lib/actions/question.action";

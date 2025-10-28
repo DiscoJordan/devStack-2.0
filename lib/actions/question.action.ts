@@ -20,7 +20,6 @@ export const getQuestions = async (params: GetQuestionsParams) => {
         model: User,
       })
       .sort({ createdAt: -1 });
-    console.log("questions", questions);
     return { questions };
   } catch (error) {
     throw error;
@@ -32,14 +31,12 @@ export async function createQuestion(params: CreateQuestionParams) {
     connectToDatabase();
 
     const { title, content, tags, author, path } = params;
-    console.log(params);
     // Create the question
     const question = await Question.create({
       title,
       content,
       author,
     });
-    console.log(question);
 
     const tagDocuments = [];
 

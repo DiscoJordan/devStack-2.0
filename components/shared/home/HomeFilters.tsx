@@ -1,8 +1,8 @@
 "use client";
 
 import { HomePageFilters } from "@/constants/filters";
-import React, { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import React from "react";
+
 import { Button } from "@/components/ui/button";
 // import { formUrlQuery } from "@/lib/utils";
 

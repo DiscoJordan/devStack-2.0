@@ -9,7 +9,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 // import { formUrlQuery } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
   filters: {
