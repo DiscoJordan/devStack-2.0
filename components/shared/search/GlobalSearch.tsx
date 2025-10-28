@@ -8,14 +8,14 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 // import GlobalResult from "./GlobalResult";
 
 const GlobalSearch = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const searchContainerRef = useRef(null);
+  // const router = useRouter();
+  // const pathname = usePathname();
+  // const searchParams = useSearchParams();
+  // const searchContainerRef = useRef(null);
 
-  const query = searchParams.get("q");
+  // const query = searchParams.get("q");
 
-  const [search, setSearch] = useState(query || "");
+  // const [search, setSearch] = useState(query || "");
   //   const [isOpen, setIsOpen] = useState(false);
 
   //   useEffect(() => {
@@ -81,7 +81,7 @@ const GlobalSearch = () => {
         <Input
           type="text"
           placeholder="Search globally"
-          value={search}
+          value={""}
           //   onChange={(e: {
           //     target: { value: React.SetStateAction<string> };
           //   }) => {
