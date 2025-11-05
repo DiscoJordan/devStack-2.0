@@ -22,7 +22,7 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "@/context/ThemeProvider";
 
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 
 interface Props {
   type?: string;
@@ -37,68 +37,48 @@ const Question = ({ type, mongoUserId, questionDetails }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  //   const parsedQuestionDetails =
-  //     questionDetails && JSON.parse(questionDetails || "");
+  const parsedQuestionDetails =
+    questionDetails && JSON.parse(questionDetails || "");
 
-  //   const groupedTags = parsedQuestionDetails?.tags.map((tag: any) => tag.name);
+  const groupedTags = parsedQuestionDetails?.tags.map((tag: any) => tag.name);
 
   // 1. Define your form.
-  //   const form = useForm<z.infer<typeof QuestionsSchema>>({
-  //     resolver: zodResolver(QuestionsSchema),
-  //     defaultValues: {
-  //       title: parsedQuestionDetails?.title || "",
-  //       explanation: parsedQuestionDetails?.content || "",
-  //       tags: groupedTags || [],
-  //     },
-  //   });
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
     defaultValues: {
-      title: "",
-      explanation: "",
-      tags: [],
+      title: parsedQuestionDetails?.title || "",
+      explanation: parsedQuestionDetails?.content || "",
+      tags: groupedTags || [],
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof QuestionsSchema>) {
     setIsSubmitting(true);
-    try {
-      await createQuestion({
-        title: values.title,
-        content: values.explanation,
-        tags: values.tags,
-        author: JSON.parse(mongoUserId),
-        path: pathname,
-      });
 
-      router.push("/");
+    try {
+      if (type === "Edit") {
+        await editQuestion({
+          questionId: parsedQuestionDetails._id,
+          title: values.title,
+          content: values.explanation,
+          path: pathname,
+        });
+        router.push(`/question/${parsedQuestionDetails._id}`);
+      } else {
+        await createQuestion({
+          title: values.title,
+          content: values.explanation,
+          tags: values.tags,
+          author: JSON.parse(mongoUserId),
+          path: pathname,
+        });
+        router.push("/");
+      }
     } catch (error) {
-      console.log(error);
+    } finally {
+      setIsSubmitting(false);
     }
-    // try {
-    //   if (type === "Edit") {
-    //     await editQuestion({
-    //       questionId: parsedQuestionDetails._id,
-    //       title: values.title,
-    //       content: values.explanation,
-    //       path: pathname,
-    //     });
-    //     router.push(`/question/${parsedQuestionDetails._id}`);
-    //   } else {
-    //     await createQuestion({
-    //       title: values.title,
-    //       content: values.explanation,
-    //       tags: values.tags,
-    //       author: JSON.parse(mongoUserId),
-    //       path: pathname,
-    //     });
-    //     router.push("/");
-    //   }
-    // } catch (error) {
-    // } finally {
-    //   setIsSubmitting(false);
-    // }
   }
 
   const handleInputKeyDown = (
