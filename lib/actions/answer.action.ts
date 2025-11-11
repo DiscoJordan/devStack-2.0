@@ -10,50 +10,50 @@ import {
   GetAnswersParams,
 } from "./shared.types";
 import { revalidatePath } from "next/cache";
-import User from "@/database/user.model";
 import Interaction from "@/database/interaction.model";
+import User from "@/database/user.model";
 
 export async function getAnswers(params: GetAnswersParams) {
   try {
     connectToDatabase();
 
-    const { questionId } = params;
+    const { questionId, sortBy, page = 1, pageSize = 10 } = params;
 
-    // const skipAmount = (page - 1) * pageSize;
+    const skipAmount = (page - 1) * pageSize;
 
-    const sortOptions = {};
+    let sortOptions = {};
 
-    // switch (sortBy) {
-    //   case "highestUpvotes":
-    //     sortOptions = { upvotes: -1 };
-    //     break;
-    //   case "lowestUpvotes":
-    //     sortOptions = { upvotes: 1 };
-    //     break;
-    //   case "recent":
-    //     sortOptions = { createdAt: -1 };
-    //     break;
-    //   case "old":
-    //     sortOptions = { createdAt: 1 };
-    //     break;
+    switch (sortBy) {
+      case "highestUpvotes":
+        sortOptions = { upvotes: -1 };
+        break;
+      case "lowestUpvotes":
+        sortOptions = { upvotes: 1 };
+        break;
+      case "recent":
+        sortOptions = { createdAt: -1 };
+        break;
+      case "old":
+        sortOptions = { createdAt: 1 };
+        break;
 
-    //   default:
-    //     break;
-    // }
+      default:
+        break;
+    }
 
     const answers = await Answer.find({ question: questionId })
       .populate("author", "_id clerkId name picture")
-      .sort({ createdAt: -1 });
-    //   .skip(skipAmount)
-    //   .limit(pageSize);
+      .sort(sortOptions)
+      .skip(skipAmount)
+      .limit(pageSize);
 
-    // const totalAnswer = await Answer.countDocuments({
-    //   question: questionId,
-    // });
+    const totalAnswer = await Answer.countDocuments({
+      question: questionId,
+    });
 
-    // const isNextAnswer = totalAnswer > skipAmount + answers.length;
+    const isNextAnswer = totalAnswer > skipAmount + answers.length;
 
-    return { answers };
+    return { answers, isNextAnswer };
   } catch (error) {
     console.log(error);
     throw error;
@@ -87,14 +87,14 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
       throw new Error("Answer not found");
     }
 
-    // // Increment author's reputation
-    // await User.findByIdAndUpdate(userId, {
-    //   $inc: { reputation: hasupVoted ? -2 : 2 },
-    // });
+    // Increment author's reputation
+    await User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasupVoted ? -2 : 2 },
+    });
 
-    // await User.findByIdAndUpdate(answer.author, {
-    //   $inc: { reputation: hasupVoted ? -10 : 10 },
-    // });
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { reputation: hasupVoted ? -10 : 10 },
+    });
 
     revalidatePath(path);
   } catch (error) {
@@ -130,14 +130,14 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
       throw new Error("Answer not found");
     }
 
-    // // Increment author's reputation
-    // await User.findByIdAndUpdate(userId, {
-    //   $inc: { reputation: hasdownVoted ? -2 : 2 },
-    // });
+    // Increment author's reputation
+    await User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasdownVoted ? -2 : 2 },
+    });
 
-    // await User.findByIdAndUpdate(answer.author, {
-    //   $inc: { reputation: hasdownVoted ? -10 : 10 },
-    // });
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { reputation: hasdownVoted ? -10 : 10 },
+    });
 
     revalidatePath(path);
   } catch (error) {
@@ -184,15 +184,15 @@ export async function createAnswer(params: CreateAnswerParams) {
       $push: { answers: newAnswer._id },
     });
 
-    // await Interaction.create({
-    //   user: author,
-    //   action: "answer",
-    //   question,
-    //   answer: newAnswer._id,
-    //   tags: questionObject.tags,
-    // });
+    await Interaction.create({
+      user: author,
+      action: "answer",
+      question,
+      answer: newAnswer._id,
+      tags: questionObject.tags,
+    });
 
-    // await User.findByIdAndUpdate(author, { $inc: { reputation: 10 } });
+    await User.findByIdAndUpdate(author, { $inc: { reputation: 10 } });
 
     revalidatePath(path);
   } catch (error) {

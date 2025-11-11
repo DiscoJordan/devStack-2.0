@@ -1,68 +1,68 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
-
-// import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
-// import GlobalResult from "./GlobalResult";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
+import GlobalResult from "./GlobalResult";
 
 const GlobalSearch = () => {
-  // const router = useRouter();
-  // const pathname = usePathname();
-  // const searchParams = useSearchParams();
-  // const searchContainerRef = useRef(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const searchContainerRef = useRef(null);
 
-  // const query = searchParams.get("q");
+  const query = searchParams.get("q");
 
-  // const [search, setSearch] = useState(query || "");
-  //   const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState(query || "");
+  const [isOpen, setIsOpen] = useState(false);
 
-  //   useEffect(() => {
-  //     const handleOutsideClick = (event: unknown) => {
-  //       if (
-  //         searchContainerRef.current &&
-  //         // @ts-expect-error expected
-  //         !searchContainerRef.current.contains(event.target)
-  //       ) {
-  //         setIsOpen(false);
-  //         setSearch("");
-  //       }
-  //     };
+  useEffect(() => {
+    const handleOutsideClick = (event: unknown) => {
+      if (
+        searchContainerRef.current &&
+        // @ts-expect-error expected
+        !searchContainerRef.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+        setSearch("");
+      }
+    };
 
-  //     setIsOpen(false);
+    setIsOpen(false);
 
-  //     document.addEventListener("click", handleOutsideClick);
+    document.addEventListener("click", handleOutsideClick);
 
-  //     return () => {
-  //       document.removeEventListener("click", handleOutsideClick);
-  //     };
-  //   }, [pathname]);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, [pathname]);
 
-  //   useEffect(() => {
-  //     const delayDebounceFn = setTimeout(() => {
-  //       if (search) {
-  //         const newUrl = formUrlQuery({
-  //           params: searchParams.toString(),
-  //           key: "global",
-  //           value: search,
-  //         });
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (search) {
+        const newUrl = formUrlQuery({
+          params: searchParams.toString(),
+          key: "global",
+          value: search,
+        });
 
-  //         router.push(newUrl, { scroll: false });
-  //       } else {
-  //         if (query) {
-  //           const newUrl = removeKeysFromQuery({
-  //             params: searchParams.toString(),
-  //             keysToRemove: ["global", "type"],
-  //           });
+        router.push(newUrl, { scroll: false });
+      } else {
+        if (query) {
+          const newUrl = removeKeysFromQuery({
+            params: searchParams.toString(),
+            keysToRemove: ["global", "type"],
+          });
 
-  //           router.push(newUrl, { scroll: false });
-  //         }
-  //       }
-  //     }, 300);
+          router.push(newUrl, { scroll: false });
+        }
+      }
+    }, 300);
 
-  //     return () => clearTimeout(delayDebounceFn);
-  //   }, [search, router, pathname, searchParams, query]);
+    return () => clearTimeout(delayDebounceFn);
+  }, [search, router, pathname, searchParams, query]);
 
   return (
     <div
@@ -81,20 +81,19 @@ const GlobalSearch = () => {
         <Input
           type="text"
           placeholder="Search globally"
-          value={""}
-          onChange={() => {}}
-          //   onChange={(e: {
-          //     target: { value: React.SetStateAction<string> };
-          //   }) => {
-          //     setSearch(e.target.value);
+          value={search}
+          onChange={(e: {
+            target: { value: React.SetStateAction<string> };
+          }) => {
+            setSearch(e.target.value);
 
-          //     if (!isOpen) setIsOpen(true);
-          //     if (e.target.value === "" && isOpen) setIsOpen(false);
-          //   }}
+            if (!isOpen) setIsOpen(true);
+            if (e.target.value === "" && isOpen) setIsOpen(false);
+          }}
           className="paragraph-regular no-focus placeholder text-dark400_light700 border-none bg-transparent shadow-none outline-none"
         />
       </div>
-      {/* {isOpen && <GlobalResult />} */}
+      {isOpen && <GlobalResult />}
     </div>
   );
 };

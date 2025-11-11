@@ -164,7 +164,7 @@ const Question = ({ type, mongoUserId, questionDetails }: Props) => {
                   }}
                   onBlur={field.onBlur}
                   onEditorChange={(content) => field.onChange(content)}
-                  initialValue={""}
+                  initialValue={parsedQuestionDetails?.content}
                   init={{
                     height: 350,
                     menubar: false,

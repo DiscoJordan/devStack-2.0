@@ -92,7 +92,6 @@ const Votes = ({
           path: pathname,
         });
       } else if (type === "Answer") {
-        console.log("hasDownvoted", hasdownVoted);
         await downvoteAnswer({
           answerId: JSON.parse(itemId),
           userId: JSON.parse(userId),

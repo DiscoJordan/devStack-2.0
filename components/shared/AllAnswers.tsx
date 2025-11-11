@@ -7,7 +7,7 @@ import Image from "next/image";
 import { getTimestamp } from "@/lib/utils";
 import ParseHTML from "./ParseHTML";
 import Votes from "./Votes";
-// import Votes from "./Votes";
+import Pagination from "./Pagination";
 // import Pagination from "./Pagination";
 
 interface Props {
@@ -35,7 +35,6 @@ const AllAnswers = async ({
     <div className="mt-11">
       <div className="flex items-center justify-between">
         <h3 className="primary-text-gradient">{totalAnswers} Answers</h3>
-
         <Filter filters={AnswerFilters} />
       </div>
 
@@ -81,12 +80,12 @@ const AllAnswers = async ({
         ))}
       </div>
 
-      {/* <div className="mt-10 w-full">
+      <div className="mt-10 w-full">
         <Pagination
           pageNumber={page ? +page : 1}
           isNext={result.isNextAnswer}
         />
-      </div> */}
+      </div>
     </div>
   );
 };
