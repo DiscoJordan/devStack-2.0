@@ -104,6 +104,7 @@ export async function createQuestion(params: CreateQuestionParams) {
 
     const { title, content, tags, author, path } = params;
     // Create the question
+    console.log(author, "author");
     const question = await Question.create({
       title,
       content,
@@ -134,7 +135,7 @@ export async function createQuestion(params: CreateQuestionParams) {
       tags: tagDocuments,
     });
 
-    await User.findOneAndUpdate(author, { $inc: { reputation: 5 } });
+    await User.findByIdAndUpdate(author, { $inc: { reputation: 5 } });
 
     revalidatePath(path);
   } catch (error) {
